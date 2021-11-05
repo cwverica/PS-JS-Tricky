@@ -1,41 +1,42 @@
 function createAccount(pin, amount = 0) {
-    this.pin = pin;
-    this.balance = amount;
-}
-createAccount.prototype.checkPin = (function (provided) {
-    if (provided !== this.pin) return false;
-});
+    return {
+        checkPin(provided) {
+            if (provided !== pin) return false;
+            return true;
+        },
 
-// checkbalance
-createAccount.prototype.checkBalance = (function (provided) {
-    if (!this.checkPin(provided)) return "Invalid PIN.";
-    return `$${this.balance}`;
-});
+        // checkbalance
+        checkBalance(provided) {
+            if (!this.checkPin(provided)) return "Invalid PIN.";
+            return `$${amount}`;
+        },
 
-//deposit
-createAccount.prototype.deposit = (function (provided, amount) {
-    if (!checkPin(provided)) return "Invalid PIN.";
-    balance += amount;
-    return `Succesfully deposited $${amount}. Current balance: $${balance}.`;
-});
+        //deposit
+        deposit(provided, depositAmt) {
+            if (!this.checkPin(provided)) return "Invalid PIN.";
+            amount += depositAmt;
+            return `Successfully deposited $${depositAmt}. Current balance: $${amount}.`;
+        },
 
-//withdraw
-createAccount.prototype.withdraw = (function (provided, amount) {
-    if (!checkPin(provided)) return "Invalid PIN.";
-    if (amount > balance) {
-        return "Withdrawal amount exceeds account balance. Transaction cancelled.";
-    } else {
-        balance -= amount;
-        return `Succesfully withdrew $${amount}. Current balance: $${balance}.`;
+        //withdraw
+        withdraw(provided, depositAmt) {
+            if (!this.checkPin(provided)) return "Invalid PIN.";
+            if (depositAmt > amount) {
+                return "Withdrawal amount exceeds account balance. Transaction cancelled.";
+            } else {
+                amount -= depositAmt;
+                return `Successfully withdrew $${depositAmt}. Current balance: $${amount}.`;
+            };
+        },
+
+        //changepin
+        changePin(provided, newPin) {
+            if (!this.checkPin(provided)) return "Invalid PIN.";
+            pin = newPin;
+            return "PIN successfully changed!"
+        }
     };
-});
 
-//changepin
-createAccount.prototype.changePin = (function (provided, newPin) {
-    if (!checkPin(provided)) return "Invalid PIN.";
-    pin = newPin;
-    return "PIN succesfully changed!"
-});
-
+};
 
 module.exports = { createAccount };
